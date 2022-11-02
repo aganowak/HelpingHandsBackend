@@ -34,7 +34,7 @@ public interface EventRepository {
                             "We will collect winter clothes for the homeless people.",
                             EventCategory.PEOPLE,
                             "Warszawa",
-                            LocalDateTime.of(2023,01,01,12, 00),
+                            LocalDateTime.of(2023,01,01,10, 00),
                             4,
                             "static/EventPictures/event_1_photo.png")));
 }
