@@ -22,21 +22,21 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/events")
-    public List<Event> getEvents(){
-        return eventService.getEvents();
-    }
-
-    @GetMapping("/event/{eventId}")
-    public Optional<Event> getEventById(
-            @PathVariable("eventId") int eventId
-    ){
-
-        return eventService.getEventById(eventId);
-    }
-
-    @GetMapping(path = "/")
-    public String mainPage(){
-        return "This is Helping Hands app";
-    }
+//    @GetMapping("/events")
+//    public List<Event> getEvents(){
+//        return eventService.getEvents();
+//    }
+//
+//    @GetMapping("/event/{eventId}")
+//    public Optional<Event> getEventById(
+//            @PathVariable("eventId") int eventId
+//    ){
+//
+//        return eventService.getEventById(eventId);
+//    }
+//
+//    @GetMapping(path = "/")
+//    public String mainPage(){
+//        return "This is Helping Hands app";
+//    }
 }
