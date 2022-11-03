@@ -19,4 +19,15 @@ public class User {
     private LocalDateTime dateJoined;
     private String userImagePath;
     private boolean isModerator;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    private int assignedEventId;
+
+    public void assign(int eventId)
+    {
+        this.assignedEventId = eventId;
+    }
 }
