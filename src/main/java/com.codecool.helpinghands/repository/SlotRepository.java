@@ -2,13 +2,15 @@ package com.codecool.helpinghands.repository;
 
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.Slot;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-public interface SlotRepository {
+@Repository
+public interface SlotRepository extends JpaRepository<Slot, Integer> {
 
 //    List<Slot> SLOTS_IN_MEMORY = new ArrayList<>(
 //            Arrays.asList(
