@@ -4,12 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue
     private int userId;
     private String firstName;
     private String lastName;
@@ -19,15 +26,21 @@ public class User {
     private LocalDateTime dateJoined;
     private String userImagePath;
     private boolean isModerator;
+    @ManyToMany
+    @JoinTable
+    private Set<Event> userEvents = new HashSet<>();
+    @ManyToMany
+    @JoinTable
+    private Set<Slot> eventSlots = new HashSet<>();
+//    private int assignedEventId;
+
 
     public int getUserId() {
         return userId;
     }
 
-    private int assignedEventId;
-
-    public void assign(int eventId)
+    public void assign(Event event)
     {
-        this.assignedEventId = eventId;
+        this.userEvents.add(event);
     }
 }
