@@ -56,4 +56,14 @@ public class UserController {
         loggedInUser.assign(event);
         System.out.println(loggedInUser);
     }
+
+    @DeleteMapping("/users/assign/{eventId}")
+    public void removeUserFromEvent(@PathVariable("eventId") int eventId){
+        User loggedInUser = userService.getUserById(1).get();
+        Event event = eventService.getEventById(eventId).get();
+        loggedInUser.remove(event);
+        System.out.println(loggedInUser);
+    }
+
+
 }
