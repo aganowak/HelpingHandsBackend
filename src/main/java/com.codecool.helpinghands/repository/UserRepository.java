@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 @Repository
-public interface UserRepository extends JpaRepository {
+public interface UserRepository extends JpaRepository<User,Integer> {
 
 //    List<User> USERS_IN_MEMORY = new ArrayList<>(
 //            Arrays.asList(
