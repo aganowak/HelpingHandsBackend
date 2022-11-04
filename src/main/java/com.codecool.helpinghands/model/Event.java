@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
@@ -32,4 +32,15 @@ public class Event {
     @OneToMany(mappedBy = "event")
     @JsonIgnore
     private Set<Slot> eventSlots = new HashSet<>();
+
+    public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath) {
+        this.eventTitle = eventTitle;
+        this.eventDescription = eventDescription;
+        this.eventCategory = eventCategory;
+        this.city = city;
+        this.numberOfSlots = numberOfSlots;
+        this.imagePath = imagePath;
+        this.dateOfEvent = LocalDateTime.now();
+        this.dateCreated = LocalDateTime.now();
+    }
 }

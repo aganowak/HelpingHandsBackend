@@ -1,12 +1,10 @@
 package com.codecool.helpinghands.controller;
 
 import com.codecool.helpinghands.model.Event;
+import com.codecool.helpinghands.model.EventCategory;
 import com.codecool.helpinghands.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +31,19 @@ public class EventController {
     ){
 
         return eventService.getEventById(eventId);
+    }
+
+    @PostMapping("/event")
+    public Event addEvent(
+            @RequestParam("city") String city,
+            @RequestParam("eventCategory") EventCategory eventCategory,
+            @RequestParam("eventDescription") String eventDescription,
+            @RequestParam("eventTitle") String eventTitle,
+            @RequestParam("imagePath") String imagePath,
+            @RequestParam("slotNum") int slotNum
+    ){
+
+        return eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum);
     }
 
     @GetMapping(path = "/")
