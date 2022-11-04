@@ -6,6 +6,8 @@ import com.codecool.helpinghands.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +42,11 @@ public class EventController {
             @RequestParam("eventDescription") String eventDescription,
             @RequestParam("eventTitle") String eventTitle,
             @RequestParam("imagePath") String imagePath,
-            @RequestParam("slotNum") int slotNum
+            @RequestParam("slotNum") int slotNum,
+            @RequestParam("dateOfEvent") String dateOfEvent
     ){
 
-        return eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum);
+        return eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
     }
 
     @GetMapping(path = "/")

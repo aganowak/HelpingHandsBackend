@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,21 +27,21 @@ public class Event {
     @Enumerated
     private EventCategory eventCategory;
     private String city;
-    private LocalDateTime dateOfEvent;
+    private LocalDate dateOfEvent;
     private int numberOfSlots;
     private String imagePath;
     @OneToMany(mappedBy = "event")
     @JsonIgnore
     private Set<Slot> eventSlots = new HashSet<>();
 
-    public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath) {
+    public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath, LocalDate dateOfEvent) {
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.eventCategory = eventCategory;
         this.city = city;
         this.numberOfSlots = numberOfSlots;
         this.imagePath = imagePath;
-        this.dateOfEvent = LocalDateTime.now();
+        this.dateOfEvent = dateOfEvent;
         this.dateCreated = LocalDateTime.now();
     }
 }
