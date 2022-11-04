@@ -3,6 +3,7 @@ package com.codecool.helpinghands.controller;
 
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.User;
+import com.codecool.helpinghands.service.EventService;
 import com.codecool.helpinghands.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,13 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private EventService eventService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, EventService eventService) {
+
         this.userService = userService;
+        this.eventService = eventService;
     }
 
 //    @GetMapping("/users")
@@ -44,4 +48,12 @@ public class UserController {
 //        return "User %d assigned to event %d".formatted(selected.getUserId(), eventId);
 //    }
 
+
+    @PostMapping("/users/assign/{eventId}")
+    public void assignUserToEvent(@PathVariable("eventId") int eventId){
+        User loggedInUser = userService.getUserById(1).get();
+        Event event = eventService.getEventById(eventId).get();
+        loggedInUser.assign(event);
+        System.out.println(loggedInUser);
+    }
 }

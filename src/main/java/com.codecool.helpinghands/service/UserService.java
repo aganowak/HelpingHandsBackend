@@ -31,5 +31,7 @@ public class UserService {
 //            return UserRepository.USERS_IN_MEMORY;
 //    }
 
-
+    public Optional <User> getUserById(int userId){
+        return userRepository.findById(userId);
+    }
 }
