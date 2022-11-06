@@ -15,7 +15,6 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {

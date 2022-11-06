@@ -26,25 +26,5 @@ public class User {
     private LocalDateTime dateJoined;
     private String userImagePath;
     private boolean isModerator;
-    @ManyToMany
-    @JoinTable
-    private Set<Event> userEvents = new HashSet<>();
-    @ManyToMany
-    @JoinTable
-    private Set<Slot> eventSlots = new HashSet<>();
-//    private int assignedEventId;
 
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void assign(Event event)
-    {
-        this.userEvents.add(event);
-    }
-
-    public void remove(Event event){
-        this.userEvents.remove(event);
-    }
 }

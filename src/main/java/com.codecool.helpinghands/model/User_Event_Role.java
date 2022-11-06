@@ -7,9 +7,7 @@ import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
 @Entity
-@Table
 public class User_Event_Role {
     @Id
     @GeneratedValue
@@ -22,8 +20,9 @@ public class User_Event_Role {
     private Event event;
     private UserRole roleInEvent;
 
-    public User_Event_Role (User user, Event event){
+    public User_Event_Role (User user, Event event, UserRole role){
         this.user = user;
         this.event = event;
+        this.roleInEvent = role;
     }
 }
