@@ -28,6 +28,7 @@ public class UserController {
     public void assignUserToEvent(@PathVariable("eventId") int eventId){
         User loggedInUser = userService.getUserById(1).get();
         Event event = eventService.getEventById(eventId).get();
+        //move to user service, save to database
         loggedInUser.assign(event);
         System.out.println(loggedInUser);
     }
@@ -36,9 +37,8 @@ public class UserController {
     public void removeUserFromEvent(@PathVariable("eventId") int eventId){
         User loggedInUser = userService.getUserById(1).get();
         Event event = eventService.getEventById(eventId).get();
+        //move to user service
         loggedInUser.remove(event);
         System.out.println(loggedInUser);
     }
-
-
 }

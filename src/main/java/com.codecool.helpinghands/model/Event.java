@@ -5,6 +5,7 @@ import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class Event {
     private int eventId;
     private LocalDateTime dateCreated;
     private String eventTitle;
+    @Type(type="text")
     private String eventDescription;
     @Enumerated
     private EventCategory eventCategory;
