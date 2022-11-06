@@ -32,9 +32,6 @@ public class Event {
     private LocalDate dateOfEvent;
     private int numberOfSlots;
     private String imagePath;
-    @OneToMany(mappedBy = "event")
-    @JsonIgnore
-    private Set<Slot> eventSlots = new HashSet<>();
 
     public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath, LocalDate dateOfEvent) {
         this.eventTitle = eventTitle;
