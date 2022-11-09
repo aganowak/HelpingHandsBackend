@@ -31,6 +31,9 @@ public class Event {
     private LocalDate dateOfEvent;
     private int numberOfSlots;
     private String imagePath;
+    @OneToMany
+    @JoinColumn
+    private Set<Slot> eventSlots;
 
     public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath, LocalDate dateOfEvent) {
         this.eventTitle = eventTitle;
