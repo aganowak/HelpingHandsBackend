@@ -26,5 +26,8 @@ public class User {
     private LocalDateTime dateJoined;
     private String userImagePath;
     private boolean isModerator;
+    @ManyToMany
+    @JoinTable
+    private Set<Slot> userSlots;
 
 }

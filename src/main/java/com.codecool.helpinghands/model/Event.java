@@ -32,7 +32,7 @@ public class Event {
     private int numberOfSlots;
     private String imagePath;
     @OneToMany
-    @JoinColumn
+    @JsonIgnore
     private Set<Slot> eventSlots;
 
     public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, int numberOfSlots, String imagePath, LocalDate dateOfEvent) {
