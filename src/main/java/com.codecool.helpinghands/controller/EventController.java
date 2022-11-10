@@ -31,7 +31,6 @@ public class EventController {
     public Optional<Event> getEventById(
             @PathVariable("eventId") int eventId
     ){
-
         return eventService.getEventById(eventId);
     }
 

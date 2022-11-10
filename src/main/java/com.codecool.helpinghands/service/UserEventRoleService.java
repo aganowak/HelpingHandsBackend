@@ -3,8 +3,7 @@ package com.codecool.helpinghands.service;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.model.UserRole;
-import com.codecool.helpinghands.model.User_Event_Role;
-import com.codecool.helpinghands.repository.EventRepository;
+import com.codecool.helpinghands.model.UserEventRole;
 import com.codecool.helpinghands.repository.UserEventRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +20,11 @@ public class UserEventRoleService {
 
 
     public void assignVolunteerToEvent(User user, Event event) {
-        userEventRoleRepository.save(new User_Event_Role(user, event, UserRole.VOLUNTEER));
+        userEventRoleRepository.save(new UserEventRole(user, event, UserRole.VOLUNTEER));
     }
 
     public void removeVolunteerFromEvent(User user, Event event){
-        User_Event_Role assignment = userEventRoleRepository.findByUserAndEvent(user, event);
+        UserEventRole assignment = userEventRoleRepository.findByUserAndEvent(user, event);
         userEventRoleRepository.delete(assignment);
     }
 }
