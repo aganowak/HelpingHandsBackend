@@ -18,5 +18,5 @@ public class EventWithSlotsDTO {
     private String city;
     private LocalDate dateOfEvent;
     private String imagePath;
-    private Set<Slot> eventSlots;
+    private Set<SlotDTO> eventSlots;
 }

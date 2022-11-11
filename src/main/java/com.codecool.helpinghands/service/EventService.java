@@ -1,11 +1,13 @@
 package com.codecool.helpinghands.service;
 
 import com.codecool.helpinghands.dto.EventWithSlotsDTO;
+import com.codecool.helpinghands.dto.SlotDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.EventCategory;
 import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.repository.EventRepository;
 import com.codecool.helpinghands.repository.SlotRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,21 +18,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
     private final SlotRepository slotRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public EventService(EventRepository eventRepository, SlotRepository slotRepository) {
+    public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper) {
 
         this.eventRepository = eventRepository;
         this.slotRepository = slotRepository;
+        this.modelMapper = modelMapper;
     }
 
     public List<Event> getAllEvents() {
+
         return eventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateOfEvent"));
     }
 
@@ -43,10 +49,7 @@ public class EventService {
 
     public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, int slotNum, String dateOfEvent) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        //convert String to LocalDate
         LocalDate dateOfEventFormatted = LocalDate.parse(dateOfEvent, formatter);
-
         Event event = new Event(eventTitle, eventDescription, eventCategory, city, slotNum, imagePath, dateOfEventFormatted);
         return eventRepository.save(event);
     }
@@ -69,6 +72,16 @@ public class EventService {
         int eventId = eventWithSlotsDto.getEventId();
         Event event = getEventById(eventId);
         Set<Slot> slotsForEvent = slotRepository.findSlotsByEvent(event);
-        eventWithSlotsDto.setEventSlots(slotsForEvent);
+        Set<SlotDTO> slotDTOsForEvent= slotsForEvent.stream()
+                                                    .map(this::convertSlotToSlotDto)
+                                                    .collect(Collectors.toSet());
+        eventWithSlotsDto.setEventSlots(slotDTOsForEvent);
+    }
+
+    public SlotDTO convertSlotToSlotDto(Slot slot) {
+        SlotDTO slotDto =  modelMapper.map(slot, SlotDTO.class);
+        int eventId = slot.getEvent().getEventId();
+        slotDto.setEventId(eventId);
+        return slotDto;
     }
 }
