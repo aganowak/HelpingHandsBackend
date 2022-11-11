@@ -3,8 +3,10 @@ package com.codecool.helpinghands.service;
 import com.codecool.helpinghands.dto.EventDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.EventCategory;
+import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.repository.EventRepository;
+import com.codecool.helpinghands.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.Sort;
@@ -19,11 +21,14 @@ import java.util.Optional;
 @Service
 public class EventService {
 
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
+    private SlotRepository slotRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, SlotRepository slotRepository) {
+
         this.eventRepository = eventRepository;
+        this.slotRepository = slotRepository;
     }
 
     public List<Event> getAllEvents() {
@@ -43,6 +48,16 @@ public class EventService {
 
         Event event = new Event(eventTitle, eventDescription, eventCategory, city, slotNum, imagePath, dateOfEventFormatted);
         return eventRepository.save(event);
+    }
+
+    public Event addSlotToEvent(int eventId, int slotStartHour, int slotStartMinutes, int slotEndHour, int slotEndMinutes){
+        Event event = eventRepository.findById(eventId).get();
+        LocalDate dateOfEvent = event.getDateOfEvent();
+        LocalDateTime slotStartLDT = dateOfEvent.atTime(slotStartHour, slotStartMinutes);
+        LocalDateTime slotEndLDT = dateOfEvent.atTime(slotEndHour, slotEndMinutes);
+        Slot slot = new Slot (event, slotStartLDT, slotEndLDT);
+        slotRepository.save(slot);
+        return event;
     }
 
 }

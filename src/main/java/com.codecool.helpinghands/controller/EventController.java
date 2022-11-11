@@ -57,6 +57,17 @@ public class EventController {
         return eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
     }
 
+    @PostMapping("/event/{eventId}/slot")
+    public Event addSlotToEvent(
+        @PathVariable("eventId") int eventId,
+        @RequestParam ("slotStartHour") int slotStartHour,
+        @RequestParam ("slotStartMinutes") int slotStartMinutes,
+        @RequestParam ("slotEndHour") int slotEndHour,
+        @RequestParam ("slotEndMinutes") int slotEndMinutes
+    ){
+        return eventService.addSlotToEvent(eventId, slotStartHour, slotStartMinutes, slotEndHour, slotEndMinutes);
+    }
+
     @GetMapping(path = "/")
     public String mainPage(){
         return "This is Helping Hands app";
