@@ -1,5 +1,6 @@
 package com.codecool.helpinghands.service;
 
+import com.codecool.helpinghands.dto.EventDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.EventCategory;
 import com.codecool.helpinghands.model.User;
@@ -19,17 +20,18 @@ import java.util.Optional;
 public class EventService {
 
     private EventRepository eventRepository;
+
     @Autowired
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
-    public List<Event> getAllEvents(){
+    public List<Event> getAllEvents() {
         return eventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateOfEvent"));
     }
 
 
-    public Optional<Event> getEventById(int eventId){
+    public Optional<Event> getEventById(int eventId) {
         return eventRepository.findById(eventId);
     }
 
