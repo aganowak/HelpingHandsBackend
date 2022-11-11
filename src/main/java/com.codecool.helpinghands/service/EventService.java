@@ -22,7 +22,7 @@ import java.util.Optional;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private SlotRepository slotRepository;
+    private final SlotRepository slotRepository;
 
     @Autowired
     public EventService(EventRepository eventRepository, SlotRepository slotRepository) {
@@ -53,11 +53,18 @@ public class EventService {
     public Event addSlotToEvent(int eventId, int slotStartHour, int slotStartMinutes, int slotEndHour, int slotEndMinutes){
         Event event = eventRepository.findById(eventId).get();
         LocalDate dateOfEvent = event.getDateOfEvent();
-        LocalDateTime slotStartLDT = dateOfEvent.atTime(slotStartHour, slotStartMinutes);
-        LocalDateTime slotEndLDT = dateOfEvent.atTime(slotEndHour, slotEndMinutes);
-        Slot slot = new Slot (event, slotStartLDT, slotEndLDT);
-        slotRepository.save(slot);
-        return event;
+        if (slotStartHour>0 && slotStartHour<25 && slotStartMinutes>=0 && slotStartMinutes<60 && slotEndHour>0 && slotEndHour<25 && slotEndMinutes>=0 && slotEndMinutes<60){
+            LocalDateTime slotStartLDT = dateOfEvent.atTime(slotStartHour, slotStartMinutes);
+            LocalDateTime slotEndLDT = dateOfEvent.atTime(slotEndHour, slotEndMinutes);
+            Slot slot = new Slot (event, slotStartLDT, slotEndLDT);
+            slotRepository.save(slot);
+            return event;
+        }
+        return null;
+    }
+
+    private boolean isInputTimeValid (int slotStartHour, int slotStartMinutes, int slotEndHour, int slotEndMinutes){
+        return slotStartHour>0 && slotStartHour<25 && slotStartMinutes>=0 && slotStartMinutes<60 && slotEndHour>0 && slotEndHour<25 && slotEndMinutes>=0 && slotEndMinutes<60;
     }
 
 }
