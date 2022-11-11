@@ -15,9 +15,9 @@ import java.util.List;
 @CrossOrigin
 public class UserController {
 
-    private UserService userService;
-    private EventService eventService;
-    private UserEventRoleService userEventRoleService;
+    private final UserService userService;
+    private final EventService eventService;
+    private final UserEventRoleService userEventRoleService;
 
     @Autowired
     public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService) {
@@ -29,15 +29,15 @@ public class UserController {
 
     @PostMapping("/users/assign/{eventId}")
     public void assignUserToEvent(@PathVariable("eventId") int eventId){
-        User loggedInUser = userService.getUserById(1).get();
-        Event event = eventService.getEventById(eventId).get();
+        User loggedInUser = userService.getUserById(1);
+        Event event = eventService.getEventById(eventId);
         userEventRoleService.assignVolunteerToEvent(loggedInUser, event);
     }
 
     @DeleteMapping("/users/assign/{eventId}")
     public void removeUserFromEvent(@PathVariable("eventId") int eventId){
-        User loggedInUser = userService.getUserById(1).get();
-        Event event = eventService.getEventById(eventId).get();
+        User loggedInUser = userService.getUserById(1);
+        Event event = eventService.getEventById(eventId);
         userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private EventRepository eventRepository;
     @Autowired
     public UserService(UserRepository userRepository, EventRepository eventRepository) {
@@ -21,17 +21,7 @@ public class UserService {
         this.eventRepository = eventRepository;
     }
 
-//        public List<User> getUsers(int userId, int eventId){
-//
-//            Optional<Event> event = eventRepository.findById(eventId);
-//            Optional<Event> user = eventRepository.findById(userId);
-//            if(event.isPresent() && user.isPresent()){
-//                userRepository.save()
-//            }
-//            return UserRepository.USERS_IN_MEMORY;
-//    }
-
-    public Optional <User> getUserById(int userId){
-        return userRepository.findById(userId);
+    public User getUserById(int userId){
+        return userRepository.findById(userId).orElse(null);
     }
 }

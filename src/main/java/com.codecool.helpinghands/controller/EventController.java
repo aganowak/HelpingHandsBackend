@@ -1,6 +1,7 @@
 package com.codecool.helpinghands.controller;
 
 import com.codecool.helpinghands.dto.EventDTO;
+import com.codecool.helpinghands.dto.EventWithSlotsDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.EventCategory;
 import com.codecool.helpinghands.service.EventService;
@@ -8,10 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,13 +36,13 @@ public class EventController {
     public EventDTO getEventById(
             @PathVariable("eventId") int eventId
     ){
-        Event event = eventService.getEventById(eventId).get();
-        EventDTO eventDto = convertEventToEventDto(event);
-        return eventDto;
+        Event event = eventService.getEventById(eventId);
+        return convertEventToEventDto(event);
     }
 
+
     @PostMapping("/event")
-    public Event addEvent(
+    public EventDTO addEvent(
             @RequestParam("city") String city,
             @RequestParam("eventCategory") EventCategory eventCategory,
             @RequestParam("eventDescription") String eventDescription,
@@ -53,19 +51,20 @@ public class EventController {
             @RequestParam("slotNum") int slotNum,
             @RequestParam("dateOfEvent") String dateOfEvent
     ){
-
-        return eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
+        Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
+        return convertEventToEventDto(event);
     }
 
     @PostMapping("/event/{eventId}/slot")
-    public Event addSlotToEvent(
+    public EventWithSlotsDTO addSlotToEvent(
         @PathVariable("eventId") int eventId,
         @RequestParam ("slotStartHour") int slotStartHour,
         @RequestParam ("slotStartMinutes") int slotStartMinutes,
         @RequestParam ("slotEndHour") int slotEndHour,
         @RequestParam ("slotEndMinutes") int slotEndMinutes
     ){
-        return eventService.addSlotToEvent(eventId, slotStartHour, slotStartMinutes, slotEndHour, slotEndMinutes);
+        Event event = eventService.addSlotToEvent(eventId, slotStartHour, slotStartMinutes, slotEndHour, slotEndMinutes);
+        return convertEventToEventWithSlotsDto(event);
     }
 
     @GetMapping(path = "/")
@@ -75,6 +74,13 @@ public class EventController {
 
     public EventDTO convertEventToEventDto(Event event) {
         return modelMapper.map(event, EventDTO.class);
+    }
+
+    private EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
+        EventWithSlotsDTO eventWithSlotsDto = modelMapper.map(event, EventWithSlotsDTO.class);
+        eventService.addSlotsToList(eventWithSlotsDto);
+        return eventWithSlotsDto;
+
     }
 }
 
