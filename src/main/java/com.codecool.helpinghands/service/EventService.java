@@ -6,6 +6,7 @@ import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AfterDomainEventPublication;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,9 +24,10 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public List<Event> getEvents(){
-        return eventRepository.findAll();
+    public List<Event> getAllEvents(){
+        return eventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateOfEvent"));
     }
+
 
     public Optional<Event> getEventById(int eventId){
         return eventRepository.findById(eventId);

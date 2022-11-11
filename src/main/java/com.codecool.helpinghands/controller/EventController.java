@@ -24,7 +24,7 @@ public class EventController {
 
     @GetMapping("/events")
     public List<Event> getEvents(){
-        return eventService.getEvents();
+        return eventService.getAllEvents();
     }
 
     @GetMapping("/event/{eventId}")
