@@ -32,16 +32,17 @@ public class EventController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/event/{eventId}")
-    public EventDTO getEventById(
+    @GetMapping("/events/{eventId}")
+    public EventWithSlotsDTO getEventById(
             @PathVariable("eventId") int eventId
     ){
         Event event = eventService.getEventById(eventId);
-        return convertEventToEventDto(event);
+        //return convertEventToEventDto(event);
+        return convertEventToEventWithSlotsDto(event);
     }
 
 
-    @PostMapping("/event")
+    @PostMapping("/events")
     public EventDTO addEvent(
             @RequestParam("city") String city,
             @RequestParam("eventCategory") EventCategory eventCategory,
@@ -55,7 +56,7 @@ public class EventController {
         return convertEventToEventDto(event);
     }
 
-    @PostMapping("/event/{eventId}/slot")
+    @PostMapping("/events/{eventId}/slot")
     public EventWithSlotsDTO addSlotToEvent(
         @PathVariable("eventId") int eventId,
         @RequestParam ("slotStartHour") int slotStartHour,
