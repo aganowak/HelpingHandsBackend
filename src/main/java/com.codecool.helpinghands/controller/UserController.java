@@ -41,11 +41,17 @@ public class UserController {
         return userService.updateUserSlot(loggedInUser);
 
     }
-
-    @DeleteMapping("/users/assign/{eventId}")
-    public void removeUserFromEvent(@PathVariable("eventId") int eventId){
+    @DeleteMapping("/users/assign/{slotId}")
+    public User deleteAssignedUserFromSlot(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
-        Event event = eventService.getEventById(eventId);
-        userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
+        System.out.println(loggedInUser);
+        return userService.deleteUserFromSlot(slotId, loggedInUser);
     }
+
+//    @DeleteMapping("/users/assign/{eventId}")
+//    public void removeUserFromEvent(@PathVariable("eventId") int eventId){
+//        User loggedInUser = userService.getUserById(1);
+//        Event event = eventService.getEventById(eventId);
+//        userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
+//    }
 }

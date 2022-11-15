@@ -27,4 +27,6 @@ public class SlotService {
         Optional<Slot> slotOptional = slotRepository.findById(slotId);
         return slotOptional.orElse(null);
     }
+
+
 }
