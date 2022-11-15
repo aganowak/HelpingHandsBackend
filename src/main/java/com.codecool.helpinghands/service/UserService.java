@@ -1,6 +1,7 @@
 package com.codecool.helpinghands.service;
 
 import com.codecool.helpinghands.model.Event;
+import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.repository.EventRepository;
 import com.codecool.helpinghands.repository.UserRepository;
@@ -23,5 +24,10 @@ public class UserService {
 
     public User getUserById(int userId){
         return userRepository.findById(userId).orElse(null);
+    }
+
+    public User updateUserSlot(User user){
+
+        return userRepository.save(user);
     }
 }

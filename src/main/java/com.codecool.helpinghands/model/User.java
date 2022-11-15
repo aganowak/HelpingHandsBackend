@@ -30,4 +30,8 @@ public class User {
     @JoinTable
     private Set<Slot> userSlots;
 
+    public void addSlot(Slot slot){
+        this.userSlots.add(slot);
+    }
+
 }
