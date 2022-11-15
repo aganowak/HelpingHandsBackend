@@ -24,15 +24,15 @@ public class UserController {
     private final EventService eventService;
     private final UserEventRoleService userEventRoleService;
     private final SlotService slotService;
-
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService, ModelMapper modelMapper) {
+    public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService,SlotService slotService , ModelMapper modelMapper) {
 
         this.userService = userService;
         this.eventService = eventService;
         this.userEventRoleService = userEventRoleService;
+        this.slotService = slotService;
         this.modelMapper = modelMapper;
     }
 
