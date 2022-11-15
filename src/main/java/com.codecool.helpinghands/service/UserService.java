@@ -24,4 +24,9 @@ public class UserService {
     public User getUserById(int userId){
         return userRepository.findById(userId).orElse(null);
     }
+
+    public User addUser(String firstName, String lastName, String userNickname, String userEmail, String password, String userImagePath) {
+        User user = new User(firstName, lastName, userNickname, userEmail, password, userImagePath);
+        return userRepository.save(user);
+    }
 }

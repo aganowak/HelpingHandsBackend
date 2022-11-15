@@ -30,4 +30,15 @@ public class User {
     @JoinTable
     private Set<Slot> userSlots;
 
+
+    public User(String firstName, String lastName, String userNickname, String userEmail, String password, String userImagePath) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+        this.password = password;
+        this.dateJoined = LocalDateTime.now();
+        this.userImagePath = userImagePath;
+        this.isModerator = false;
+    }
 }
