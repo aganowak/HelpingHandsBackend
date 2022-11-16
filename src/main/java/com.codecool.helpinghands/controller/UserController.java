@@ -55,7 +55,7 @@ public class UserController {
         Event event = eventService.getEventById(eventId);
         userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
     }
-    @PostMapping("/users")
+    @PostMapping("/users/register")
     public UserDTO registerUser(
             @RequestParam("firstName") String firstName,
             @RequestParam("lastName") String lastName,
@@ -64,6 +64,37 @@ public class UserController {
             @RequestParam("password") String password,
             @RequestParam("userImagePath") String userImagePath
     ){
+        if (userService.findByUserEmail(userEmail) != null) {
+            var u = new UserDTO();
+            u.setUserId(-1);
+            u.setFirstName("User already exists!");
+            return u;
+        }
+        if (!userEmail.matches("^(.+)@(\\S+)$")) {
+            var u = new UserDTO();
+            u.setUserId(-1);
+            u.setFirstName("Please enter correct email");
+            return u;
+        }
+        if (!firstName.matches("^\\S+$")) {
+            var u = new UserDTO();
+            u.setUserId(-1);
+            u.setFirstName("Please enter correct first name");
+            return u;
+        }
+        if (!lastName.matches("^\\S+$")) {
+            var u = new UserDTO();
+            u.setUserId(-1);
+            u.setFirstName("Please enter correct last name");
+            return u;
+        }
+        if (!password.matches("^.{8,}$")) {
+            var u = new UserDTO();
+            u.setUserId(-1);
+            u.setFirstName("Password should bee at least 8 characters long");
+            return u;
+        }
+
         User user = userService.addUser(firstName, lastName, userNickname, userEmail, password, userImagePath);
         return convertUserToUserDto(user);
     }

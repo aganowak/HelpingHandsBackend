@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 
+    User findByUserEmail(String user_email);
+
 //    List<User> USERS_IN_MEMORY = new ArrayList<>(
 //            Arrays.asList(
 //                    new User(0, "Barabasz", "Barabejski", "Bari", "bari@buziaczek.pl",

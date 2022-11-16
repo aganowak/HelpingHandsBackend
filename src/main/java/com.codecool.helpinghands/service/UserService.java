@@ -26,6 +26,11 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
+    public User findByUserEmail(String userEmail){
+        return userRepository.findByUserEmail(userEmail);
+    }
+
+
     public User updateUserSlot(User user){
 
         return userRepository.save(user);
