@@ -23,14 +23,4 @@ public class UserEventRoleService {
         userEventRoleRepository.save(new UserEventRole(user, event, UserRole.VOLUNTEER));
     }
 
-    public void removeVolunteerFromEvent(User user, Event event) {
-
-    }
-
-
-
-//    public void removeVolunteerFromEvent(User user, Event event){
-//        UserEventRole assignment = userEventRoleRepository.findByUserAndEvent(user, event);
-//        userEventRoleRepository.delete(assignment);
-//    }
 }

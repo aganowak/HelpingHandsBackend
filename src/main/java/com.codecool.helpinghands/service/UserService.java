@@ -30,8 +30,13 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public User updateUserSlot(User user){
-
+    public User assignUserToSlotAndEvent(User user, int slotId){
+         // assign user to event
+        Event event = slotService.getEventBySlotId(slotId);
+        userEventRoleService.assignVolunteerToEvent(user, event);
+        // assign user to slot
+        Slot slot = slotService.getSlotById(slotId);
+        user.addSlot(slot);
         return userRepository.save(user);
     }
 
@@ -42,8 +47,7 @@ public class UserService {
         userRepository.save(loggedInUser);
         // remove assigned event from user
         Event event = slotService.getEventBySlotId(slotId);
-        int eventId = event.getEventId();
-        userEventRoleRepository.deleteUserEventRoleByEventId(eventId, loggedInUser.getUserId());
+        userEventRoleRepository.deleteUserEventRoleByEventId(event.getEventId(), loggedInUser.getUserId());
 
         return  loggedInUser;
     }

@@ -1,8 +1,6 @@
 package com.codecool.helpinghands.controller;
 
 
-import com.codecool.helpinghands.model.Event;
-import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.service.EventService;
 import com.codecool.helpinghands.service.SlotService;
@@ -32,14 +30,7 @@ public class UserController {
     @PostMapping("/users/assign/{slotId}") //slotId
     public User assignUserToEventAndSlot(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
-        // assign user to event
-        Event event = slotService.getEventBySlotId(slotId);
-        userEventRoleService.assignVolunteerToEvent(loggedInUser, event);
-        // assign user to slot
-        Slot slot = slotService.getSlotById(slotId);
-        loggedInUser.addSlot(slot);
-
-        return userService.updateUserSlot(loggedInUser);
+        return userService.assignUserToSlotAndEvent(loggedInUser, slotId);
 
     }
     @DeleteMapping("/users/assign/{slotId}")
@@ -48,10 +39,4 @@ public class UserController {
         return userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
     }
 
-//    @DeleteMapping("/users/assign/{eventId}")
-//    public void removeUserFromEvent(@PathVariable("eventId") int eventId){
-//        User loggedInUser = userService.getUserById(1);
-//        Event event = eventService.getEventById(eventId);
-//        userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
-//    }
 }
