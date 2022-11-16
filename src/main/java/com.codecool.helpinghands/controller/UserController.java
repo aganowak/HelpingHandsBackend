@@ -31,21 +31,21 @@ public class UserController {
 
     @PostMapping("/users/assign/{slotId}") //slotId
     public User assignUserToEventAndSlot(@PathVariable("slotId") int slotId){
-        // assign user to event
         User loggedInUser = userService.getUserById(1);
+        // assign user to event
         Event event = slotService.getEventBySlotId(slotId);
         userEventRoleService.assignVolunteerToEvent(loggedInUser, event);
         // assign user to slot
         Slot slot = slotService.getSlotById(slotId);
         loggedInUser.addSlot(slot);
+
         return userService.updateUserSlot(loggedInUser);
 
     }
     @DeleteMapping("/users/assign/{slotId}")
-    public User deleteAssignedUserFromSlot(@PathVariable("slotId") int slotId){
+    public User deleteAssignedUserFromSlotAndEvent(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
-        System.out.println(loggedInUser);
-        return userService.deleteUserFromSlot(slotId, loggedInUser);
+        return userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
     }
 
 //    @DeleteMapping("/users/assign/{eventId}")
