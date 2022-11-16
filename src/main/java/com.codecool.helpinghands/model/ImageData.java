@@ -16,6 +16,9 @@ public class ImageData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+    private String type;
+
     @OneToOne
     @JoinColumn(name = "event_event_id")
     private Event event;

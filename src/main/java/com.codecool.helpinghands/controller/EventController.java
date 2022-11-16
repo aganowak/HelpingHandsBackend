@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class EventController {
 
-    private EventService eventService;
-    private ModelMapper modelMapper;
+    private final EventService eventService;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public EventController(EventService eventService, ModelMapper modelMapper) {
@@ -74,12 +74,14 @@ public class EventController {
     }
 
     public EventDTO convertEventToEventDto(Event event) {
+
         return modelMapper.map(event, EventDTO.class);
     }
 
     private EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
         EventWithSlotsDTO eventWithSlotsDto = modelMapper.map(event, EventWithSlotsDTO.class);
         eventService.addSlotsToList(eventWithSlotsDto);
+        eventService.addPhotoToEventWithSlotsDto(eventWithSlotsDto);
         return eventWithSlotsDto;
 
     }
