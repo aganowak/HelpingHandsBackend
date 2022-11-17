@@ -113,6 +113,11 @@ public class EventController {
         return Optional.ofNullable(eventService.getEventsByCity(cityName));
     }
 
+    @GetMapping("/events/category/{category}")
+    public Optional<List<Event>> searchEventsByCategory(@PathVariable("category") String category){
+        return Optional.ofNullable(eventService.getEventsByCategory(category));
+    }
+
 }
 
 
