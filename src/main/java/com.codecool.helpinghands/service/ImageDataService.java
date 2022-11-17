@@ -1,43 +1,43 @@
 package com.codecool.helpinghands.service;
 
+import com.codecool.helpinghands.dto.EventWithSlotsDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.ImageData;
-import com.codecool.helpinghands.repository.EventRepository;
 import com.codecool.helpinghands.repository.ImageDataRepository;
 import com.codecool.helpinghands.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import javax.transaction.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
 public class ImageDataService {
 
     private final ImageDataRepository imageDataRepository;
-    private final EventService eventService;
 
     @Autowired
-    public ImageDataService (ImageDataRepository imageDataRepository, EventService eventService){
+    public ImageDataService (ImageDataRepository imageDataRepository){
         this.imageDataRepository = imageDataRepository;
-        this.eventService = eventService;
     }
 
-    /*
-    public ImageUploadResponse uploadImage(MultipartFile file) throws IOException {
-        imageDataRepository.save(ImageData.builder()
-                .name(file.getOriginalFilename())
-                .type(file.getContentType())
-                .imageData(ImageUtil.compressImage(file.getBytes())).build());
 
-        return new ImageUploadResponse("Image uploaded successfully: " +
-                file.getOriginalFilename());
+    public void addPictureToEvent (MultipartFile file, Event event) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String fileContentType = file.getContentType();
+        byte[] compressedImageData = ImageUtil.compressImage(file.getBytes());
+        imageDataRepository.save(new ImageData(fileName, fileContentType, event, compressedImageData));
     }
-     */
 
 
-    public byte[] getImageByEventId(int eventId) {
-        Event event = eventService.getEventById(eventId);
-        Optional<ImageData> dbImage = imageDataRepository.findByEvent(event);
-        return ImageUtil.decompressImage(dbImage.get().getImageData());
+    @Transactional
+    public byte[] getImageByEventId(Event event) {
+        ImageData dbImage = imageDataRepository.findByEvent(event).orElse(null);
+        assert dbImage != null;
+        return ImageUtil.decompressImage(dbImage.getImageData());
     }
+
+
 }

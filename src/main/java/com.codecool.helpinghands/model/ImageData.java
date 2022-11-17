@@ -8,9 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "imageData")
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ImageData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +24,11 @@ public class ImageData {
     @Lob
     @Column(name = "imagedata", length = 1000)
     private byte[] imageData;
+
+    public ImageData(String fileName, String fileContentType, Event event, byte[] compressedImageData) {
+        this.name = fileName;
+        this.type = fileContentType;
+        this.event = event;
+        this.imageData = compressedImageData;
+    }
 }

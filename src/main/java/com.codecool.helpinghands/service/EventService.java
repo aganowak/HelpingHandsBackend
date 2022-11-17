@@ -26,15 +26,13 @@ public class EventService {
     private final EventRepository eventRepository;
     private final SlotRepository slotRepository;
     private final ModelMapper modelMapper;
-    private final ImageDataService imageDataService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper, ImageDataService imageDataService) {
+    public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper) {
 
         this.eventRepository = eventRepository;
         this.slotRepository = slotRepository;
         this.modelMapper = modelMapper;
-        this.imageDataService = imageDataService;
     }
 
     public List<Event> getAllEvents() {
@@ -87,9 +85,4 @@ public class EventService {
         return slotDto;
     }
 
-    public void addPhotoToEventWithSlotsDto(EventWithSlotsDTO eventWithSlotsDto) {
-        int eventId = eventWithSlotsDto.getEventId();
-        byte[] eventPhoto = imageDataService.getImageByEventId(eventId);
-        eventWithSlotsDto.setImage(eventPhoto);
-    }
 }
