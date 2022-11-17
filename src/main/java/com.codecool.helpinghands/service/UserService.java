@@ -9,7 +9,6 @@ import com.codecool.helpinghands.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,13 +33,26 @@ public class UserService {
     }
 
     public User assignUserToSlotAndEvent(User user, int slotId){
-         // assign user to event
         Event event = slotService.getEventBySlotId(slotId);
-        userEventRoleService.assignVolunteerToEvent(user, event);
-        // assign user to slot
         Slot slot = slotService.getSlotById(slotId);
-        user.addSlot(slot);
-        return userRepository.save(user);
+        // assign user to slot
+        if(isUserAssignToEvent(event.getEventId())){
+            user.addSlot(slot);
+            userRepository.save(user);
+        }
+        // assign user to event
+        if(isUserAssignToEvent(event.getEventId())) {
+            userEventRoleService.assignVolunteerToEvent(user, event);
+        }
+        return user;
+    }
+
+
+    public boolean isUserAssignToEvent(int eventId){
+        Optional<Integer> assignedUserId = userEventRoleRepository.getUserIDFromEvent(eventId);
+        if(assignedUserId.isEmpty()){
+            return true;
+        } else return false;
     }
 
     public User findByUserEmail(String userEmail){
