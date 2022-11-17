@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -83,6 +84,12 @@ public class EventController {
         return eventWithSlotsDto;
 
     }
+
+    @GetMapping("/events/city/{cityName}")
+    public Optional<List<Event>> searchEventsByCity(@PathVariable("cityName") String cityName){
+        return Optional.ofNullable(eventService.getEventsByCity(cityName));
+    }
+
 }
 
 
