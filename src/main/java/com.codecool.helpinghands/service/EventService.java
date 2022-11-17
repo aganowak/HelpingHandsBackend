@@ -84,4 +84,5 @@ public class EventService {
         slotDto.setEventId(eventId);
         return slotDto;
     }
+
 }
