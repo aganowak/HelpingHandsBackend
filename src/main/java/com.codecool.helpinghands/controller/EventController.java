@@ -96,7 +96,7 @@ public class EventController {
     private EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
         EventWithSlotsDTO eventWithSlotsDto = modelMapper.map(event, EventWithSlotsDTO.class);
         eventService.addSlotsToList(eventWithSlotsDto);
-        //addPhotoToEventWithSlotsDto(eventWithSlotsDto);
+        addPhotoToEventWithSlotsDto(eventWithSlotsDto);
         return eventWithSlotsDto;
     }
 
