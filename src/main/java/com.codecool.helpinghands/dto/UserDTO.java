@@ -11,6 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 public class UserDTO {
+    //uzywac typow wysokich (domyslne wartosci nie sa null)
     private int userId;
     private String firstName;
     private String lastName;

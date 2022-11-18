@@ -30,6 +30,14 @@ public class User {
     @JoinTable
     private Set<Slot> userSlots;
 
+    public User(String userNickname, String userEmail, String password) {
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+        this.password = password;
+        this.dateJoined = LocalDateTime.now();
+        this.isModerator = false;
+    }
+
     public void addSlot(Slot slot){
         this.userSlots.add(slot);
     }

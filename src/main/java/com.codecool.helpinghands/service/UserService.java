@@ -59,8 +59,8 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail);
     }
 
-    public User addUser(String firstName, String lastName, String userNickname, String userEmail, String password, String userImagePath) {
-        User user = new User(firstName, lastName, userNickname, userEmail, password, userImagePath);
+    public User addUser(String userNickname, String userEmail, String password) {
+        User user = new User(userNickname, userEmail, password);
         return userRepository.save(user);
     }
 

@@ -52,6 +52,7 @@ public class EventController {
 
     @PostMapping("/events")
     public EventDTO addEvent(
+            //RequestBody
             @RequestParam("city") String city,
             @RequestParam("eventCategory") EventCategory eventCategory,
             @RequestParam("eventDescription") String eventDescription,
