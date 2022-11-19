@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -56,46 +57,28 @@ public class UserController {
         userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
     }
     @PostMapping("/users/register")
-    public UserDTO registerUser(
-            @RequestParam("firstName") String firstName,
-            @RequestParam("lastName") String lastName,
-            @RequestParam("userNickname") String userNickname,
-            @RequestParam("userEmail") String userEmail,
-            @RequestParam("password") String password,
-            @RequestParam("userImagePath") String userImagePath
-    ){
-        if (userService.findByUserEmail(userEmail) != null) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("User already exists!");
-            return u;
-        }
-        if (!userEmail.matches("^(.+)@(\\S+)$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct email");
-            return u;
-        }
-        if (!firstName.matches("^\\S+$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct first name");
-            return u;
-        }
-        if (!lastName.matches("^\\S+$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct last name");
-            return u;
-        }
-        if (!password.matches("^.{8,}$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Password should bee at least 8 characters long");
-            return u;
-        }
+    public UserDTO registerUser(@RequestBody User user){
+        user.setDateJoined(LocalDateTime.now());
+//        if (userService.findByUserEmail(userEmail) != null) {
+//            var u = new UserDTO();
+//            u.setUserId(-1);
+//            u.setFirstName("User already exists!");
+//            return u;
+//        }
+//        if (!userEmail.matches("^(.+)@(\\S+)$")) {
+//            var u = new UserDTO();
+//            u.setUserId(-1);
+//            u.setFirstName("Please enter correct email");
+//            return u;
+//        }
+//        if (!password.matches("^.{8,}$")) {
+//            var u = new UserDTO();
+//            u.setUserId(-1);
+//            u.setFirstName("Password should bee at least 8 characters long");
+//            return u;
+//        }
 
-        User user = userService.addUser(firstName, lastName, userNickname, userEmail, password, userImagePath);
+        userService.addUser(user);
         return convertUserToUserDto(user);
     }
 
