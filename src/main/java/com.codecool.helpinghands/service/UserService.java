@@ -1,11 +1,14 @@
 package com.codecool.helpinghands.service;
 
+import com.codecool.helpinghands.dto.RegistrationDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.model.User;
 import com.codecool.helpinghands.repository.EventRepository;
 import com.codecool.helpinghands.repository.UserEventRoleRepository;
 import com.codecool.helpinghands.repository.UserRepository;
+import com.codecool.helpinghands.validator.WrongInputException;
+import com.codecool.helpinghands.validator.registrationValidators.RegistrationValidatorFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +22,15 @@ public class UserService {
     private SlotService slotService;
     private final UserEventRoleService userEventRoleService;
     private final UserEventRoleRepository userEventRoleRepository;
+    private final RegistrationValidatorFacade validatorFacade;
     @Autowired
-    public UserService(UserRepository userRepository, UserEventRoleRepository userEventRoleRepository,  EventRepository eventRepository, SlotService slotService, UserEventRoleService userEventRoleService) {
+    public UserService(UserRepository userRepository, UserEventRoleRepository userEventRoleRepository, EventRepository eventRepository, SlotService slotService, UserEventRoleService userEventRoleService, RegistrationValidatorFacade validatorFacade) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
         this.slotService = slotService;
         this.userEventRoleService = userEventRoleService;
         this.userEventRoleRepository = userEventRoleRepository;
+        this.validatorFacade = validatorFacade;
     }
 
     public User getUserById(int userId){
@@ -74,5 +79,11 @@ public class UserService {
         userEventRoleRepository.deleteUserEventRoleByEventId(event.getEventId(), loggedInUser.getUserId());
 
         return  loggedInUser;
+    }
+
+    public void verifyUserInput(String userNickname, String userEmail, String password) throws WrongInputException {
+        RegistrationDTO userData = new RegistrationDTO(userNickname, userEmail, password);
+        userData = validatorFacade.validate(userData);
+        addUser(userNickname, userEmail, password);
     }
 }
