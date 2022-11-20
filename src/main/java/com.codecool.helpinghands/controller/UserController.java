@@ -3,6 +3,7 @@ package com.codecool.helpinghands.controller;
 
 import com.codecool.helpinghands.dto.RegistrationDTO;
 import com.codecool.helpinghands.dto.UserDTO;
+import com.codecool.helpinghands.dto.EventDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.model.User;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,14 +29,16 @@ public class UserController {
     private final EventService eventService;
     private final UserEventRoleService userEventRoleService;
     private final SlotService slotService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService,SlotService slotService) {
+    public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService,SlotService slotService , ModelMapper modelMapper) {
 
         this.userService = userService;
         this.eventService = eventService;
         this.userEventRoleService = userEventRoleService;
         this.slotService = slotService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/users/assign/{slotId}") //slotId
@@ -42,6 +46,7 @@ public class UserController {
         User loggedInUser = userService.getUserById(1);
         return userService.assignUserToSlotAndEvent(loggedInUser, slotId);
     }
+
     @DeleteMapping("/users/assign/{slotId}")
     public User deleteAssignedUserFromSlotAndEvent(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
@@ -49,51 +54,16 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public ResponseEntity<String> registerUser(
-            @RequestParam("userNickname") String userNickname,
-            @RequestParam("userEmail") String userEmail,
-            @RequestParam("password") String password
-    ){
-        try{
-            userService.verifyUserInput(userNickname, userEmail, password);
-        } catch (WrongInputException e){
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.BAD_REQUEST);
-        }
-        /*
-        if (userService.findByUserEmail(userEmail) != null) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("User already exists!");
-            return u;
-        }
-        if (!userEmail.matches("^(.+)@(\\S+)$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct email");
-            return u;
-        }
-        if (!firstName.matches("^\\S+$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct first name");
-            return u;
-        }
-        if (!lastName.matches("^\\S+$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Please enter correct last name");
-            return u;
-        }
-        if (!password.matches("^.{8,}$")) {
-            var u = new UserDTO();
-            u.setUserId(-1);
-            u.setFirstName("Password should bee at least 8 characters long");
-            return u;
-        }
-         */
-        return new ResponseEntity<>("New user registered.", HttpStatus.OK);
+    public UserDTO registerUser(@RequestBody User user){
+        user.setDateJoined(LocalDateTime.now());
+
+
+        userService.addUser(user);
+        return convertUserToUserDto(user);
+    }
+
+    public UserDTO convertUserToUserDto(User user){
+        return modelMapper.map(user, UserDTO.class);
     }
 
 }
