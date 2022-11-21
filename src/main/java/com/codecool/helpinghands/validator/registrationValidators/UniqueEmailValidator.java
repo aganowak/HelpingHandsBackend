@@ -18,7 +18,7 @@ public class UniqueEmailValidator extends AbstractValidator<RegistrationDTO, Wro
     @Override
     protected RegistrationDTO validateAndApplyNext(RegistrationDTO inputData) throws WrongInputException {
         String email = inputData.getUserEmail();
-        if ( userService.findByUserEmail(email) != null ) {
+        if (userService.findByUserEmail(email).isPresent()) {
             throw new WrongInputException( "Email already exists!" );
         }
         return inputData;

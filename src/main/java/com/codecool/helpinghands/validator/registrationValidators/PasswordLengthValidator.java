@@ -6,15 +6,14 @@ import com.codecool.helpinghands.validator.WrongInputException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
-public class CorrectEmailValidator extends AbstractValidator<RegistrationDTO, WrongInputException> {
+public class PasswordLengthValidator extends AbstractValidator <RegistrationDTO, WrongInputException>  {
     @Override
     protected RegistrationDTO validateAndApplyNext(RegistrationDTO inputData) throws WrongInputException {
-        String email = inputData.getUserEmail();
-        if (!email.matches("^(.+)@(\\S+)$")) {
-            throw new WrongInputException("Please enter correct email");
+        String password = inputData.getPassword();
+        if (password.length()<8) {
+            throw new WrongInputException("Password must be at least 8 characters");
         }
         return inputData;
     }

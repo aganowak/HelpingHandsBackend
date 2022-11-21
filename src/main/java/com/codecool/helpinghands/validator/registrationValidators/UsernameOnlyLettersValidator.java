@@ -1,11 +1,23 @@
 package com.codecool.helpinghands.validator.registrationValidators;
 
+import com.codecool.helpinghands.dto.RegistrationDTO;
 import com.codecool.helpinghands.validator.AbstractValidator;
 import com.codecool.helpinghands.validator.WrongInputException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-public class UsernameOnlyLettersValidator extends AbstractValidator <Object, WrongInputException>  {
+@Component
+@RequiredArgsConstructor
+public class UsernameOnlyLettersValidator extends AbstractValidator <RegistrationDTO, WrongInputException>  {
+
+    private static final String ONLY_LETTERS_PATTERN = "^[a-zA-Z]+$";
     @Override
-    protected Object validateAndApplyNext(Object input) throws WrongInputException {
-        return null;
+    protected RegistrationDTO validateAndApplyNext(RegistrationDTO inputData) throws WrongInputException {
+        String username = inputData.getUserNickname();
+        if ( !username.matches( ONLY_LETTERS_PATTERN ) ) {
+            throw new WrongInputException( "Username must contains letters only" );
+        }
+        inputData.setUserNickname(username.toUpperCase());
+        return inputData;
     }
 }

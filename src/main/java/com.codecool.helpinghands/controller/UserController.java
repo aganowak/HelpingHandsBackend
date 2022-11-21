@@ -33,7 +33,6 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService,SlotService slotService , ModelMapper modelMapper) {
-
         this.userService = userService;
         this.eventService = eventService;
         this.userEventRoleService = userEventRoleService;
@@ -54,16 +53,17 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public UserDTO registerUser(@RequestBody User user){
+    public ResponseEntity<String> registerUser(@RequestBody User user){
         user.setDateJoined(LocalDateTime.now());
-
-
-        userService.addUser(user);
-        return convertUserToUserDto(user);
-    }
-
-    public UserDTO convertUserToUserDto(User user){
-        return modelMapper.map(user, UserDTO.class);
+        try {
+            userService.verifyUserInput(user);
+            userService.addUser(user);
+        } catch (WrongInputException e) {
+            return new ResponseEntity<>(
+                    e.getMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("New user registered", HttpStatus.OK);
     }
 
 }
