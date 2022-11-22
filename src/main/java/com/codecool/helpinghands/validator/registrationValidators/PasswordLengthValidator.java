@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PasswordLengthValidator extends AbstractValidator <RegistrationDTO, WrongInputException>  {
+public class PasswordLengthValidator extends AbstractValidator <RegistrationDTO>  {
     @Override
     protected RegistrationDTO validateAndApplyNext(RegistrationDTO inputData) throws WrongInputException {
         String password = inputData.getPassword();

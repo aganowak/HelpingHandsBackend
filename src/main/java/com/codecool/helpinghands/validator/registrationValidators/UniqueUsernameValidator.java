@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UniqueUsernameValidator extends AbstractValidator<RegistrationDTO, WrongInputException> {
+public class UniqueUsernameValidator extends AbstractValidator<RegistrationDTO> {
 
     @Autowired
     UserRepository userService;

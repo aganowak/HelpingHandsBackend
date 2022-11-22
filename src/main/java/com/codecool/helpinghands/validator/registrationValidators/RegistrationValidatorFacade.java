@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RegistrationValidatorFacade extends AbstractValidatorFacade <RegistrationDTO, WrongInputException> {
+public class RegistrationValidatorFacade extends AbstractValidatorFacade <RegistrationDTO> {
 
-    public RegistrationValidatorFacade(List<ValidatorChain<RegistrationDTO, WrongInputException>> validators) {
+    public RegistrationValidatorFacade(List<ValidatorChain<RegistrationDTO>> validators) {
         super(validators);
     }
 }

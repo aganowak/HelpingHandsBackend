@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UsernameOnlyLettersValidator extends AbstractValidator <RegistrationDTO, WrongInputException>  {
+public class UsernameOnlyLettersValidator extends AbstractValidator <RegistrationDTO>  {
 
     private static final String ONLY_LETTERS_PATTERN = "^[a-zA-Z]+$";
     @Override

@@ -1,8 +1,8 @@
 package com.codecool.helpinghands.validator;
 
-public interface ValidatorChain<T, E extends Exception> {
+public interface ValidatorChain<T> {
 
-    T validate(T input) throws E;
+    T validate(T input) throws WrongInputException;
 
-    void setNext(ValidatorChain<T, E> nextValidator);
+    void setNext(ValidatorChain<T> nextValidator);
 }

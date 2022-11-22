@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CorrectEmailValidator extends AbstractValidator<RegistrationDTO, WrongInputException> {
+public class CorrectEmailValidator extends AbstractValidator<RegistrationDTO> {
     @Override
     protected RegistrationDTO validateAndApplyNext(RegistrationDTO inputData) throws WrongInputException {
         String email = inputData.getUserEmail();
