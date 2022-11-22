@@ -1,7 +1,6 @@
 package com.codecool.helpinghands.controller;
 
 
-import com.codecool.helpinghands.dto.EventDTO;
 import com.codecool.helpinghands.dto.UserDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.Slot;
@@ -39,23 +38,16 @@ public class UserController {
 
     @PostMapping("/users/assign/{slotId}") //slotId
     public User assignUserToEventAndSlot(@PathVariable("slotId") int slotId){
-        // assign user to event
         User loggedInUser = userService.getUserById(1);
-        Event event = slotService.getEventBySlotId(slotId);
-        userEventRoleService.assignVolunteerToEvent(loggedInUser, event);
-        // assign user to slot
-        Slot slot = slotService.getSlotById(slotId);
-        loggedInUser.addSlot(slot);
-        return userService.updateUserSlot(loggedInUser);
+        return userService.assignUserToSlotAndEvent(loggedInUser, slotId);
 
     }
-
-    @DeleteMapping("/users/assign/{eventId}")
-    public void removeUserFromEvent(@PathVariable("eventId") int eventId){
+    @DeleteMapping("/users/assign/{slotId}")
+    public User deleteAssignedUserFromSlotAndEvent(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
-        Event event = eventService.getEventById(eventId);
-        userEventRoleService.removeVolunteerFromEvent(loggedInUser, event);
+        return userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
     }
+
     @PostMapping("/users/register")
     public UserDTO registerUser(@RequestBody User user){
         user.setDateJoined(LocalDateTime.now());

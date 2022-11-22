@@ -40,6 +40,14 @@ public class EventService {
         return eventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateOfEvent"));
     }
 
+    public List<Event> getEventsByCity(String cityName){
+        return eventRepository.findAll().stream().filter(event -> event.getCity().equals(cityName)).collect(Collectors.toList());
+    }
+
+    public List<Event> getEventsByCategory(String category){
+        return eventRepository.findAll().stream().filter(event -> event.getEventCategory().equals(EventCategory.valueOf(category))).collect(Collectors.toList());
+    }
+
 
     public Event getEventById(int eventId) {
         Optional<Event> eventOptional = eventRepository.findById(eventId);
@@ -84,4 +92,7 @@ public class EventService {
         slotDto.setEventId(eventId);
         return slotDto;
     }
+
+
+
 }
