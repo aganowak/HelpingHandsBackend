@@ -35,7 +35,9 @@ public class ImageDataService {
     @Transactional
     public byte[] getImageByEventId(Event event) {
         ImageData dbImage = imageDataRepository.findByEvent(event).orElse(null);
-        assert dbImage != null;
+        if (dbImage == null){
+            return null;
+        };
         return ImageUtil.decompressImage(dbImage.getImageData());
     }
 

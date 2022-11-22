@@ -18,14 +18,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    User findByUserEmail(String user_email);
+    Optional<User> findByUserEmail(String user_email);
 
+    Optional<User> findByUserNickname(String user_nickname);
 
-//    List<User> USERS_IN_MEMORY = new ArrayList<>(
-//            Arrays.asList(
-//                    new User(0, "Barabasz", "Barabejski", "Bari", "bari@buziaczek.pl",
-//                       "bari123", null, "", false, -1)
-//                )
-//
-//    );
 }
