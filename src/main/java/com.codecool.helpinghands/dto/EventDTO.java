@@ -16,6 +16,5 @@ public class EventDTO {
     private String eventDescription;
     private String city;
     private LocalDate dateOfEvent;
-    //private String imagePath;
     private byte[] image;
 }

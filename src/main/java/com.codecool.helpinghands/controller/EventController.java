@@ -92,7 +92,9 @@ public class EventController {
     }
 
     public EventDTO convertEventToEventDto(Event event) {
-        return modelMapper.map(event, EventDTO.class);
+        EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
+        addPhotoToEventDto(eventDTO);
+        return eventDTO;
     }
 
     private EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
@@ -107,6 +109,13 @@ public class EventController {
         Event event = eventService.getEventById(eventId);
         byte[] eventPhoto = imageDataService.getImageByEventId(event);
         eventWithSlotsDto.setImage(eventPhoto);
+    }
+
+    public void addPhotoToEventDto (EventDTO eventDto) {
+        int eventId = eventDto.getEventId();
+        Event event = eventService.getEventById(eventId);
+        byte[] eventPhoto = imageDataService.getImageByEventId(event);
+        eventDto.setImage(eventPhoto);
     }
 
     @GetMapping("/events/city/{cityName}")
