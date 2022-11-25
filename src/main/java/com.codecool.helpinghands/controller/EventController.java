@@ -8,6 +8,8 @@ import com.codecool.helpinghands.service.EventService;
 import com.codecool.helpinghands.service.ImageDataService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,37 +24,31 @@ public class EventController {
 
 
     private final EventService eventService;
-    private final ModelMapper modelMapper;
     private final ImageDataService imageDataService;
 
 
     @Autowired
-    public EventController(EventService eventService, ModelMapper modelMapper, ImageDataService imageDataService) {
+    public EventController(EventService eventService, ImageDataService imageDataService) {
         this.eventService = eventService;
-        this.modelMapper = modelMapper;
         this.imageDataService = imageDataService;
     }
 
 
     @GetMapping("/events")
     public List<EventDTO> getEvents(){
-        return eventService.getAllEvents().stream()
-                .map(this::convertEventToEventDto)
-                .collect(Collectors.toList());
+        return eventService.getAllEventsAsEventDTO();
     }
 
     @GetMapping("/events/{eventId}")
     public EventWithSlotsDTO getEventById(
             @PathVariable("eventId") int eventId
     ){
-        Event event = eventService.getEventById(eventId);
-        //return convertEventToEventDto(event);
-        return convertEventToEventWithSlotsDto(event);
+        return eventService.getEventDtoByEventId(eventId);
     }
 
 
     @PostMapping("/events")
-    public EventDTO addEvent(
+    public ResponseEntity<EventDTO> addEvent(
             //RequestBody
             @RequestParam("city") String city,
             @RequestParam("eventCategory") EventCategory eventCategory,
@@ -63,11 +59,14 @@ public class EventController {
             @RequestParam("dateOfEvent") String dateOfEvent
     ){
         Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
-        return convertEventToEventDto(event);
+        EventDTO eventDTO = eventService.convertEventToEventDto(event);
+        return new ResponseEntity<>(
+                eventDTO,
+                HttpStatus.OK);
     }
 
     @PostMapping("/events/{eventId}/slot")
-    public EventWithSlotsDTO addSlotToEvent(
+    public ResponseEntity<EventWithSlotsDTO> addSlotToEvent(
         @PathVariable("eventId") int eventId,
         @RequestParam ("slotStartHour") int slotStartHour,
         @RequestParam ("slotStartMinutes") int slotStartMinutes,
@@ -75,47 +74,26 @@ public class EventController {
         @RequestParam ("slotEndMinutes") int slotEndMinutes
     ){
         Event event = eventService.addSlotToEvent(eventId, slotStartHour, slotStartMinutes, slotEndHour, slotEndMinutes);
-        return convertEventToEventWithSlotsDto(event);
+        EventWithSlotsDTO eventWithSlotsDTO = eventService.convertEventToEventWithSlotsDto(event);
+        return new ResponseEntity<>(
+                eventWithSlotsDTO,
+                HttpStatus.OK);
     }
 
     @PostMapping("/events/{eventId}/uploadPicture")
-    public void uploadImage(
+    public ResponseEntity<String> uploadImage(
             @PathVariable("eventId") int eventId,
             @RequestParam("image") MultipartFile file) throws IOException {
         Event event = eventService.getEventById(eventId);
         imageDataService.addPictureToEvent(file, event);
+        return new ResponseEntity<>(
+                "New image added",
+                HttpStatus.OK);
     }
 
     @GetMapping(path = "/")
     public String mainPage(){
         return "This is Helping Hands app";
-    }
-
-    public EventDTO convertEventToEventDto(Event event) {
-        EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
-        addPhotoToEventDto(eventDTO);
-        return eventDTO;
-    }
-
-    private EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
-        EventWithSlotsDTO eventWithSlotsDto = modelMapper.map(event, EventWithSlotsDTO.class);
-        eventService.addSlotsToList(eventWithSlotsDto);
-        addPhotoToEventWithSlotsDto(eventWithSlotsDto);
-        return eventWithSlotsDto;
-    }
-
-    public void addPhotoToEventWithSlotsDto (EventWithSlotsDTO eventWithSlotsDto) {
-        int eventId = eventWithSlotsDto.getEventId();
-        Event event = eventService.getEventById(eventId);
-        byte[] eventPhoto = imageDataService.getImageByEventId(event);
-        eventWithSlotsDto.setImage(eventPhoto);
-    }
-
-    public void addPhotoToEventDto (EventDTO eventDto) {
-        int eventId = eventDto.getEventId();
-        Event event = eventService.getEventById(eventId);
-        byte[] eventPhoto = imageDataService.getImageByEventId(event);
-        eventDto.setImage(eventPhoto);
     }
 
     @GetMapping("/events/city/{cityName}")

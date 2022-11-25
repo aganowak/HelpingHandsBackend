@@ -26,21 +26,13 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final EventService eventService;
-    private final UserEventRoleService userEventRoleService;
-    private final SlotService slotService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserController(UserService userService, EventService eventService, UserEventRoleService userEventRoleService,SlotService slotService , ModelMapper modelMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.eventService = eventService;
-        this.userEventRoleService = userEventRoleService;
-        this.slotService = slotService;
-        this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/users/assign/{slotId}") //slotId
+    @PostMapping("/users/assign/{slotId}")
     public User assignUserToEventAndSlot(@PathVariable("slotId") int slotId){
         User loggedInUser = userService.getUserById(1);
         return userService.assignUserToSlotAndEvent(loggedInUser, slotId);

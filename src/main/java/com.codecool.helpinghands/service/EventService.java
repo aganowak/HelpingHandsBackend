@@ -1,5 +1,6 @@
 package com.codecool.helpinghands.service;
 
+import com.codecool.helpinghands.dto.EventDTO;
 import com.codecool.helpinghands.dto.EventWithSlotsDTO;
 import com.codecool.helpinghands.dto.SlotDTO;
 import com.codecool.helpinghands.model.Event;
@@ -26,19 +27,28 @@ public class EventService {
     private final EventRepository eventRepository;
     private final SlotRepository slotRepository;
     private final ModelMapper modelMapper;
+    private final ImageDataService imageDataService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper) {
+    public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper, ImageDataService imageDataService) {
 
         this.eventRepository = eventRepository;
         this.slotRepository = slotRepository;
         this.modelMapper = modelMapper;
+        this.imageDataService = imageDataService;
     }
 
     public List<Event> getAllEvents() {
-
         return eventRepository.findAll(Sort.by(Sort.Direction.DESC, "dateOfEvent"));
     }
+
+    public List<EventDTO> getAllEventsAsEventDTO (){
+        List<Event> events = getAllEvents();
+        return events.stream()
+                .map(this::convertEventToEventDto)
+                .collect(Collectors.toList());
+    }
+
 
     public List<Event> getEventsByCity(String cityName){
         return eventRepository.findAll().stream().filter(event -> event.getCity().equals(cityName)).collect(Collectors.toList());
@@ -52,6 +62,11 @@ public class EventService {
     public Event getEventById(int eventId) {
         Optional<Event> eventOptional = eventRepository.findById(eventId);
         return eventOptional.orElse(null);
+    }
+
+    public EventWithSlotsDTO getEventDtoByEventId(int eventId){
+        Event event = getEventById(eventId);
+        return convertEventToEventWithSlotsDto(event);
     }
 
 
@@ -92,6 +107,34 @@ public class EventService {
         slotDto.setEventId(eventId);
         return slotDto;
     }
+
+    public EventDTO convertEventToEventDto(Event event) {
+        EventDTO eventDTO = modelMapper.map(event, EventDTO.class);
+        addPhotoToEventDto(eventDTO);
+        return eventDTO;
+    }
+
+    public EventWithSlotsDTO convertEventToEventWithSlotsDto(Event event) {
+        EventWithSlotsDTO eventWithSlotsDto = modelMapper.map(event, EventWithSlotsDTO.class);
+        addSlotsToList(eventWithSlotsDto);
+        addPhotoToEventWithSlotsDto(eventWithSlotsDto);
+        return eventWithSlotsDto;
+    }
+
+    public void addPhotoToEventWithSlotsDto (EventWithSlotsDTO eventWithSlotsDto) {
+        int eventId = eventWithSlotsDto.getEventId();
+        Event event = getEventById(eventId);
+        byte[] eventPhoto = imageDataService.getImageByEventId(event);
+        eventWithSlotsDto.setImage(eventPhoto);
+    }
+
+    public void addPhotoToEventDto (EventDTO eventDto) {
+        int eventId = eventDto.getEventId();
+        Event event = getEventById(eventId);
+        byte[] eventPhoto = imageDataService.getImageByEventId(event);
+        eventDto.setImage(eventPhoto);
+    }
+
 
 
 
