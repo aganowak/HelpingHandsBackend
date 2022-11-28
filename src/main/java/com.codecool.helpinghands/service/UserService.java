@@ -12,6 +12,7 @@ import com.codecool.helpinghands.validator.registrationValidators.RegistrationVa
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,6 +27,8 @@ public class UserService {
     private final UserEventRoleRepository userEventRoleRepository;
     private final RegistrationValidatorFacade validatorFacade;
     private final ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
+
 
     public User getUserById(int userId){
         return userRepository.findById(userId).orElse(null);
@@ -54,8 +57,9 @@ public class UserService {
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
 
