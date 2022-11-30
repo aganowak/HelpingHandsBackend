@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @CrossOrigin
 public class EventController {
 
-
     private final EventService eventService;
     private final ImageDataService imageDataService;
 

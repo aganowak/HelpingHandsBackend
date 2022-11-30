@@ -44,18 +44,6 @@ public class UserController {
         return userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
     }
 
-    @PostMapping("/users/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user){
-        user.setDateJoined(LocalDateTime.now());
-        try {
-            userService.verifyUserInput(user);
-            userService.addUser(user);
-        } catch (WrongInputException e) {
-            return new ResponseEntity<>(
-                    e.getMessage(),
-                    HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>("New user registered", HttpStatus.OK);
-    }
+
 
 }

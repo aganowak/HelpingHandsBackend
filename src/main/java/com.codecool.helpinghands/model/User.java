@@ -3,18 +3,21 @@ package com.codecool.helpinghands.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+
+import static javax.persistence.FetchType.EAGER;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     private int userId;
@@ -29,6 +32,8 @@ public class User {
     @ManyToMany
     @JoinTable
     private Set<Slot> userSlots;
+    @Transient
+    private List<GrantedAuthority> authorities;
 
     public User(String userNickname, String userEmail, String password) {
         this.firstName = "";
@@ -39,9 +44,40 @@ public class User {
         this.dateJoined = LocalDateTime.now();
         this.userImagePath = userImagePath;
         this.isModerator = false;
+        this.authorities = new ArrayList<>();
     }
 
     public void addSlot(Slot slot){
         this.userSlots.add(slot);
+    }
+
+    @Override
+    public String getUsername() {
+        return userNickname;
+    }
+
+    @Override
+    public List<GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

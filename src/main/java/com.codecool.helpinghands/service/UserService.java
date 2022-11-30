@@ -12,25 +12,39 @@ import com.codecool.helpinghands.validator.registrationValidators.RegistrationVa
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final SlotService slotService;
-    private final UserEventRoleService userEventRoleService;
-    private final UserEventRoleRepository userEventRoleRepository;
-    private final RegistrationValidatorFacade validatorFacade;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SlotService slotService;
+    @Autowired
+    private UserEventRoleService userEventRoleService;
+    @Autowired
+    private UserEventRoleRepository userEventRoleRepository;
+    @Autowired
+    private RegistrationValidatorFacade validatorFacade;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
 
     public User getUserById(int userId){
+
         return userRepository.findById(userId).orElse(null);
     }
 
@@ -54,6 +68,7 @@ public class UserService {
     }
 
     public User findByUserEmail(String userEmail){
+
         return userRepository.findByUserEmail(userEmail).orElse(null);
     }
 
@@ -76,4 +91,10 @@ public class UserService {
         RegistrationDTO userData = modelMapper.map(user, RegistrationDTO.class);
         validatorFacade.validate(userData);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUserNickname(username).orElseThrow(()->new UsernameNotFoundException("not found"));
+    }
+
 }
