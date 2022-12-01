@@ -32,36 +32,14 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-    /*
-    @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody SignupRequest signUpRequest) {
-        if (userDetailsManager.userExists(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Username is already taken!");
-        }
-
-        userDetailsManager.createUser(User.withUsername(signUpRequest.getUsername())
-                .passwordEncoder(encoder::encode)
-                .password(signUpRequest.getPassword())
-                .roles("USER")
-                .build());
-
-        return ResponseEntity.ok("User registered successfully!");
-    }
-    */
-
     @PostMapping("/users/register")
     public ResponseEntity<String> registerUser(@RequestBody com.codecool.helpinghands.model.User user){
         user.setDateJoined(LocalDateTime.now());
+        System.out.println(user);
         try {
             userService.verifyUserInput(user);
             userService.addUser(user);
-            userService.addUser((com.codecool.helpinghands.model.User) User.withUsername(user.getUserNickname())
-                    .passwordEncoder(encoder::encode)
-                    .password(user.getPassword())
-                    .roles("USER")
-                    .build());
+
         } catch (WrongInputException e) {
             return new ResponseEntity<>(
                     e.getMessage(),
