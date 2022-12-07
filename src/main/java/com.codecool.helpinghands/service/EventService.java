@@ -70,10 +70,10 @@ public class EventService {
     }
 
 
-    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, int slotNum, String dateOfEvent) {
+    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, String slots, String dateOfEvent) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateOfEventFormatted = LocalDate.parse(dateOfEvent, formatter);
-        Event event = new Event(eventTitle, eventDescription, eventCategory, city, slotNum, imagePath, dateOfEventFormatted);
+        Event event = new Event(eventTitle, eventDescription, eventCategory, city, slots, imagePath, dateOfEventFormatted);
         return eventRepository.save(event);
     }
 
