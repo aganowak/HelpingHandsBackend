@@ -65,8 +65,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/").permitAll()
                 .antMatchers(HttpMethod.POST, "/users/register").permitAll()
-                .antMatchers(HttpMethod.POST, "/events").hasRole(USER)
-                .antMatchers(HttpMethod.POST, "/users/**").hasRole(USER)
+                //.antMatchers(HttpMethod.POST, "/users/assign/*").hasRole(USER)
+                //.antMatchers(HttpMethod.DELETE, "/users/assign/*").hasRole(USER)
                 .antMatchers("/**").permitAll().anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
@@ -107,13 +107,16 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001", "http://localhost:3002"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "content-type"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+        configuration.setExposedHeaders(Arrays.asList("content-type"));
+        configuration.setAllowedHeaders(Arrays.asList("content-type"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 
 
 }

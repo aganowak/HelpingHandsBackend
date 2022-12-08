@@ -125,13 +125,14 @@ public class EventController {
     }
 
     @GetMapping("/events/city/{cityName}")
-    public Optional<List<Event>> searchEventsByCity(@PathVariable("cityName") String cityName){
-        return Optional.ofNullable(eventService.getEventsByCity(cityName));
+    public List<EventDTO> searchEventsByCity(@PathVariable("cityName") String cityName){
+        return eventService.getEventsByCity(cityName);
     }
 
     @GetMapping("/events/category/{category}")
-    public Optional<List<Event>> searchEventsByCategory(@PathVariable("category") String category){
-        return Optional.ofNullable(eventService.getEventsByCategory(category));
+    public List<EventDTO> searchEventsByCategory(@PathVariable("category") String category){
+        System.out.println(category);
+        return eventService.getEventsByCategory(category);
     }
 
 }

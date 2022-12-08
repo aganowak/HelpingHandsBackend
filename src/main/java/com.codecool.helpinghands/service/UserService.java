@@ -1,5 +1,6 @@
 package com.codecool.helpinghands.service;
 
+import com.codecool.helpinghands.configuration.jwt.JwtUtils;
 import com.codecool.helpinghands.dto.RegistrationDTO;
 import com.codecool.helpinghands.model.Event;
 import com.codecool.helpinghands.model.Slot;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -41,6 +43,8 @@ public class UserService implements UserDetailsService {
     private ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtUtils jwtUtils;
 
 
     public User getUserById(int userId){
@@ -94,7 +98,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUserNickname(username).orElseThrow(()->new UsernameNotFoundException("not found"));
+        return userRepository.findByUserNickname(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
     }
 
+    public User getUserFroJWTCookie(HttpServletRequest request) {
+        String jwt = jwtUtils.getJwtFromCookies(request);
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        return userRepository.findByUserNickname(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    }
 }

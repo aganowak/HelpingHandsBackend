@@ -50,12 +50,18 @@ public class EventService {
     }
 
 
-    public List<Event> getEventsByCity(String cityName){
-        return eventRepository.findAll().stream().filter(event -> event.getCity().equals(cityName)).collect(Collectors.toList());
+    public List<EventDTO> getEventsByCity(String cityName){
+        List<Event> events = eventRepository.findAll().stream().filter(event -> event.getCity().equals(cityName)).toList();
+        return events.stream()
+                .map(this::convertEventToEventDto)
+                .collect(Collectors.toList());
     }
 
-    public List<Event> getEventsByCategory(String category){
-        return eventRepository.findAll().stream().filter(event -> event.getEventCategory().equals(EventCategory.valueOf(category))).collect(Collectors.toList());
+    public List<EventDTO> getEventsByCategory(String category){
+        List<Event> events = eventRepository.findAll().stream().filter(event -> event.getEventCategory().equals(EventCategory.valueOf(category))).toList();
+        return events.stream()
+                .map(this::convertEventToEventDto)
+                .collect(Collectors.toList());
     }
 
 

@@ -36,10 +36,10 @@ public class AuthController {
     @PostMapping("/users/register")
     public ResponseEntity<String> registerUser(@RequestBody com.codecool.helpinghands.model.User user){
         user.setDateJoined(LocalDateTime.now());
-        System.out.println(user);
         try {
             userService.verifyUserInput(user);
             userService.addUser(user);
+            System.out.println("Successful registration");
 
         } catch (WrongInputException e) {
             return new ResponseEntity<>(
@@ -59,6 +59,7 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             userDetails = (UserDetails) authentication.getPrincipal();
             jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+            System.out.println("Successful login");
         } catch (AuthenticationException e){
             return new ResponseEntity<>(
                     e.getMessage(),

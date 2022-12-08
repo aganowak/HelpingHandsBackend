@@ -16,8 +16,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,17 +35,31 @@ public class UserController {
     }
 
     @PostMapping("/users/assign/{slotId}")
-    public User assignUserToEventAndSlot(@PathVariable("slotId") int slotId){
-        User loggedInUser = userService.getUserById(1);
-        return userService.assignUserToSlotAndEvent(loggedInUser, slotId);
+    public ResponseEntity<String> assignUserToEventAndSlot(HttpServletRequest request, @PathVariable("slotId") int slotId){
+        try {
+            //User loggedInUser = userService.getUserFroJWTCookie(request);
+            User loggedInUser = userService.getUserById(1);
+            userService.assignUserToSlotAndEvent(loggedInUser, slotId);
+            System.out.println("User succesfully signed up for event");
+        } catch (UsernameNotFoundException e) {
+            System.out.println("User could not sign up for event");
+            return new ResponseEntity<>(
+                    e.getMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("User was added to the chosen slot.", HttpStatus.OK);
     }
 
     @DeleteMapping("/users/assign/{slotId}")
-    public User deleteAssignedUserFromSlotAndEvent(@PathVariable("slotId") int slotId){
-        User loggedInUser = userService.getUserById(1);
-        return userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
+    public ResponseEntity<String> deleteAssignedUserFromSlotAndEvent(HttpServletRequest request, @PathVariable("slotId") int slotId){
+        try {
+            User loggedInUser = userService.getUserFroJWTCookie(request);
+            userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
+        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>(
+                    e.getMessage(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("User was removed from the choszn slot.", HttpStatus.OK);
     }
-
-
-
 }
