@@ -30,18 +30,17 @@ public class Event {
     private String city;
     private LocalDate dateOfEvent;
     private String slots;
-    private String imagePath;
+
     @OneToMany
     @JsonIgnore
     private Set<Slot> eventSlots;
 
-    public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, String slots, String imagePath, LocalDate dateOfEvent) {
+    public Event(String eventTitle, String eventDescription, EventCategory eventCategory, String city, LocalDate dateOfEvent) {
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.eventCategory = eventCategory;
         this.city = city;
         this.slots = slots;
-        this.imagePath = imagePath;
         this.dateOfEvent = dateOfEvent;
         this.dateCreated = LocalDateTime.now();
     }

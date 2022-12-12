@@ -41,18 +41,20 @@ public class EventController {
     }
 
 
-    @GetMapping("/events")
+    @GetMapping("/api/events")
     public List<EventDTO> getEvents(){
         return eventService.getAllEventsAsEventDTO();
     }
 
-    @GetMapping("/events/{eventId}")
+    @GetMapping("/api/events/{eventId}")
     public EventWithSlotsDTO getEventById(
             @PathVariable("eventId") int eventId
     ){
         return eventService.getEventDtoByEventId(eventId);
     }
 
+
+    /*
     @PostMapping(value = "/events/createNew", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createEvent(@RequestBody NewEventDTO e) {
         Event event = eventService.addEvent(e.getCity(), e.getEventCategory(), e.getEventDescription(), e.getEventTitle(), "", "XX", e.getDateOfEvent());
@@ -73,24 +75,29 @@ public class EventController {
 
         return new ResponseEntity<>(resp_str , HttpStatus.OK);
     }
+    */
+
 
 
     @PostMapping("/events")
-    public ResponseEntity<EventDTO> addEvent(
+    public void addEvent(
             //RequestBody
             @RequestParam("city") String city,
             @RequestParam("eventCategory") EventCategory eventCategory,
             @RequestParam("eventDescription") String eventDescription,
             @RequestParam("eventTitle") String eventTitle,
-            @RequestParam("imagePath") String imagePath,
-            @RequestParam("slots") String slots,
+            //@RequestParam("slots") List<Integer[]> slots,
             @RequestParam("dateOfEvent") String dateOfEvent
     ){
-        Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slots, dateOfEvent);
-        EventDTO eventDTO = eventService.convertEventToEventDto(event);
+        Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, dateOfEvent);
+        /*
+        eventService.addSlotsToEvent(event, slots);
+        EventWithSlotsDTO newEventWithSlotsDTO = eventService.convertEventToEventWithSlotsDto(event);
         return new ResponseEntity<>(
-                eventDTO,
+                newEventWithSlotsDTO,
                 HttpStatus.OK);
+
+         */
     }
 
     @PostMapping("/events/{eventId}/slot")
@@ -124,12 +131,12 @@ public class EventController {
         return "This is Helping Hands app";
     }
 
-    @GetMapping("/events/city/{cityName}")
+    @GetMapping("/api/events/city/{cityName}")
     public List<EventDTO> searchEventsByCity(@PathVariable("cityName") String cityName){
         return eventService.getEventsByCity(cityName);
     }
 
-    @GetMapping("/events/category/{category}")
+    @GetMapping("/api/events/category/{category}")
     public List<EventDTO> searchEventsByCategory(@PathVariable("category") String category){
         System.out.println(category);
         return eventService.getEventsByCategory(category);

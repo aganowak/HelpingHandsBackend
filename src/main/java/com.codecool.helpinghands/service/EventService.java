@@ -76,10 +76,10 @@ public class EventService {
     }
 
 
-    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, String slots, String dateOfEvent) {
+    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String dateOfEvent) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateOfEventFormatted = LocalDate.parse(dateOfEvent, formatter);
-        Event event = new Event(eventTitle, eventDescription, eventCategory, city, slots, imagePath, dateOfEventFormatted);
+        Event event = new Event(eventTitle, eventDescription, eventCategory, city, dateOfEventFormatted);
         return eventRepository.save(event);
     }
 
@@ -142,6 +142,14 @@ public class EventService {
     }
 
 
-
-
+    public void addSlotsToEvent(Event event, List<Integer[]> slots) {
+        LocalDate dateOfEvent = event.getDateOfEvent();
+        for (Integer[] slot:slots) {
+            LocalDateTime slotStartLDT = dateOfEvent.atTime(slot[0], slot[1]);
+            LocalDateTime slotEndLDT = dateOfEvent.atTime(slot[2], slot[3]);
+            int numOfVolunteers = slot[4];
+            Slot newSlot = new Slot (event, slotStartLDT, slotEndLDT, numOfVolunteers);
+            slotRepository.save(newSlot);
+        }
+    }
 }

@@ -29,4 +29,10 @@ public class Slot {
         this.slotStartTime = slotStartTime;
         this.slotEndTime = slotEndTime;
     }
+
+    public Slot(Event event, LocalDateTime slotStartTime, LocalDateTime slotEndTime, int numOfVolunteers){
+        this.event = event;
+        this.slotStartTime = slotStartTime;
+        this.slotEndTime = slotEndTime;
+    }
 }

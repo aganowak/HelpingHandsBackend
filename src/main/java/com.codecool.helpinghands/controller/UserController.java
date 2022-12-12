@@ -34,7 +34,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/users/assign/{slotId}")
+    @PostMapping("api/auth/users/assign/{slotId}")
     public ResponseEntity<String> assignUserToEventAndSlot(HttpServletRequest request, @PathVariable("slotId") int slotId){
         try {
             //User loggedInUser = userService.getUserFroJWTCookie(request);
@@ -50,7 +50,7 @@ public class UserController {
         return new ResponseEntity<>("User was added to the chosen slot.", HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/assign/{slotId}")
+    @DeleteMapping("/api/auth/users/assign/{slotId}")
     public ResponseEntity<String> deleteAssignedUserFromSlotAndEvent(HttpServletRequest request, @PathVariable("slotId") int slotId){
         try {
             User loggedInUser = userService.getUserFroJWTCookie(request);
