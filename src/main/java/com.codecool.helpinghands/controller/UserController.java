@@ -34,7 +34,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("api/auth/users/assign/{slotId}")
+    @PostMapping("/api/auth/users/assign/{slotId}")
     public ResponseEntity<String> assignUserToEventAndSlot(HttpServletRequest request, @PathVariable("slotId") int slotId){
         try {
             //User loggedInUser = userService.getUserFroJWTCookie(request);
@@ -53,13 +53,15 @@ public class UserController {
     @DeleteMapping("/api/auth/users/assign/{slotId}")
     public ResponseEntity<String> deleteAssignedUserFromSlotAndEvent(HttpServletRequest request, @PathVariable("slotId") int slotId){
         try {
-            User loggedInUser = userService.getUserFroJWTCookie(request);
+            //User loggedInUser = userService.getUserFroJWTCookie(request);
+            User loggedInUser = userService.getUserById(1);
             userService.deleteUserFromSlotAndEvent(slotId, loggedInUser);
+            System.out.println("User succesfully removed from event");
         } catch (UsernameNotFoundException e) {
             return new ResponseEntity<>(
                     e.getMessage(),
                     HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("User was removed from the choszn slot.", HttpStatus.OK);
+        return new ResponseEntity<>("User was removed from the chosen slot.", HttpStatus.OK);
     }
 }

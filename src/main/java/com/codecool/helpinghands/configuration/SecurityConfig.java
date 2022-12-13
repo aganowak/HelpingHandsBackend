@@ -58,17 +58,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors();
-        http.csrf().disable()
+        http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
-                //.antMatchers(HttpMethod.POST, "/users/assign/*").hasRole(USER)
-                //.antMatchers(HttpMethod.DELETE, "/users/assign/*").hasRole(USER)
+                .antMatchers(HttpMethod.OPTIONS,"/api/auth/users/assign/*").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/auth/users/assign/*").hasRole(USER)
+                .antMatchers(HttpMethod.DELETE, "/api/auth/users/assign/*").hasRole(USER)
+                .antMatchers(HttpMethod.POST, "/api/auth/users/register").permitAll()
                 .antMatchers("/**").permitAll().anyRequest().authenticated();
-
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -103,6 +101,8 @@ public class SecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+
+    /*
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -115,6 +115,8 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+     */
 
 
 
