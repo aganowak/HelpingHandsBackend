@@ -50,9 +50,11 @@ public class EventController {
             @RequestParam("eventTitle") String eventTitle,
             @RequestParam("imagePath") String imagePath,
             @RequestParam("slotNum") int slotNum,
-            @RequestParam("dateOfEvent") String dateOfEvent
+            @RequestParam("dateOfEvent") String dateOfEvent,
+            @RequestParam("eventCreatorName") String eventCreatorName,
+            @RequestParam("eventCreatorEmail") String eventCreatorEmail
     ){
-        Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent);
+        Event event = eventService.addEvent(city, eventCategory, eventDescription, eventTitle, imagePath, slotNum, dateOfEvent, eventCreatorName, eventCreatorEmail);
         return convertEventToEventDto(event);
     }
 

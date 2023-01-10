@@ -7,6 +7,8 @@ import com.codecool.helpinghands.model.EventCategory;
 import com.codecool.helpinghands.model.Slot;
 import com.codecool.helpinghands.repository.EventRepository;
 import com.codecool.helpinghands.repository.SlotRepository;
+import com.codecool.helpinghands.utils.KindOfEmail;
+import com.codecool.helpinghands.utils.SendingEmail;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -26,6 +28,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final SlotRepository slotRepository;
     private final ModelMapper modelMapper;
+
+
 
     @Autowired
     public EventService(EventRepository eventRepository, SlotRepository slotRepository, ModelMapper modelMapper) {
@@ -47,10 +51,11 @@ public class EventService {
     }
 
 
-    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, int slotNum, String dateOfEvent) {
+    public Event addEvent(String city, EventCategory eventCategory, String eventDescription, String eventTitle, String imagePath, int slotNum, String dateOfEvent, String eventCreatorName, String eventCreatorEmail) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate dateOfEventFormatted = LocalDate.parse(dateOfEvent, formatter);
         Event event = new Event(eventTitle, eventDescription, eventCategory, city, slotNum, imagePath, dateOfEventFormatted);
+        SendingEmail.sendSimpleEmail(eventCreatorEmail, eventCreatorName, KindOfEmail.AFTER_CREATION_EVENT, eventTitle, null, null, null);
         return eventRepository.save(event);
     }
 
